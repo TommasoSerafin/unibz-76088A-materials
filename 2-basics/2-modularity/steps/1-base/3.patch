@@ -1,0 +1,86 @@
+diff --git a/2-basics/2-modularity/main.c b/2-basics/2-modularity/main.c
+index d05c1be..b990d19 100644
+--- a/2-basics/2-modularity/main.c
++++ b/2-basics/2-modularity/main.c
+@@ -5,22 +5,23 @@
+ 
+ bool is_in_error;
+ 
+-void init();
+-int16_t get_current_temperature();
+-void send(uint8_t *buffer, size_t len);
++void temperature_sensor_init();
++int16_t temperature_sensor_get_current_temperature();
++void spi_bus_init();
++void spi_bus_send(uint8_t *buffer, size_t len);
+ 
+ int main(int argc, char *argv[]) {
+   // How should I invoke the init of temperature_sensor and the init of spi_bus?
+-  init();
+-  init();
++  spi_bus_init();
++  temperature_sensor_init();
+ 
+   while (1) {
+-    int16_t temperature = get_current_temperature();
++    int16_t temperature = temperature_sensor_get_current_temperature();
+     // How to use the is_in_error of temperature_sensor?
+     if (is_in_error) {
+       printf("Temperature_sensor error\n");
+     }
+-    send((uint8_t *)&temperature, sizeof(int16_t));
++    spi_bus_send((uint8_t *)&temperature, sizeof(int16_t));
+     // How to use the is_in_error of spi_bus?
+     if (is_in_error) {
+       printf("SPI bus error\n");
+diff --git a/2-basics/2-modularity/spi_bus.c b/2-basics/2-modularity/spi_bus.c
+index 81ebfe7..ce9956e 100644
+--- a/2-basics/2-modularity/spi_bus.c
++++ b/2-basics/2-modularity/spi_bus.c
+@@ -4,9 +4,9 @@
+ 
+ bool is_in_error;
+ bool is_idle;
+-void init() {
++void spi_bus_init() {
+ }
+-void send(uint8_t *buffer, size_t len) {
++void spi_bus_send(uint8_t *buffer, size_t len) {
+   if (len > 0 && is_idle) {
+     printf("Sending: ");
+     for (size_t i = 0; i < len; ++i) {
+@@ -17,7 +17,7 @@ void send(uint8_t *buffer, size_t len) {
+     printf("\n");
+   }
+ }
+-void deinit() {
++void spi_bus_deinit() {
+ }
+-void foo() {
++void spi_bus_foo() {
+ }
+diff --git a/2-basics/2-modularity/temperature_sensor.c b/2-basics/2-modularity/temperature_sensor.c
+index ec8a441..99f50c2 100644
+--- a/2-basics/2-modularity/temperature_sensor.c
++++ b/2-basics/2-modularity/temperature_sensor.c
+@@ -3,16 +3,16 @@
+ 
+ bool is_in_error;
+ bool is_idle;
+-void init() {
++void temperature_sensor_init() {
+ }
+-int16_t get_current_temperature() {
++int16_t temperature_sensor_get_current_temperature() {
+   if (is_idle) {
+     return 0;
+   }
+   return INT16_MIN;
+ }
+-void deinit() {
++void temperature_sensor_deinit() {
+ }
+ 
+-void foo() {
++void temperature_sensor_foo() {
+ }

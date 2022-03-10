@@ -1,0 +1,13 @@
+diff --git a/2-basics/2-modularity/main.c b/2-basics/2-modularity/main.c
+index 2dd15dd..4c040aa 100644
+--- a/2-basics/2-modularity/main.c
++++ b/2-basics/2-modularity/main.c
+@@ -3,6 +3,8 @@
+ #include <stdio.h>
+ #include <stdbool.h>
+ 
++bool is_in_error;
++
+ int main(int argc, char *argv[]) {
+   // How should I invoke the init of temperature_sensor and the init of spi_bus?
+   init();
