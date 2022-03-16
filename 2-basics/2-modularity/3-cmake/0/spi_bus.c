@@ -2,11 +2,11 @@
 #include <stdint.h>
 #include <stdio.h>
 
-int error_number;
-bool is_idle;
-void init(void) {
+int spi_bus_error_number = 0;
+static bool is_idle = true;
+void spi_bus_init(void) {
 }
-void send(uint8_t *buffer, size_t len) {
+void spi_bus_send(uint8_t *buffer, size_t len) {
   if (len > 0 && is_idle) {
     is_idle = false;
     printf("Sending: ");
@@ -19,7 +19,7 @@ void send(uint8_t *buffer, size_t len) {
     is_idle = true;
   }
 }
-void deinit(void) {
+void spi_bus_deinit(void) {
 }
-void foo(void) {
+static void foo(void) {
 }

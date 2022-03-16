@@ -3,10 +3,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-bool is_in_error;
+int error_number;
 
-void init();
-int16_t get_current_temperature();
+void init(void);
+int16_t get_current_temperature(void);
 void send(uint8_t *buffer, size_t len);
 
 int main(int argc, char *argv[]) {
@@ -16,14 +16,14 @@ int main(int argc, char *argv[]) {
 
   while (1) {
     int16_t temperature = get_current_temperature();
-    // How to use the is_in_error of temperature_sensor?
-    if (is_in_error) {
+    // How to use the error_number of temperature_sensor?
+    if (error_number != 0) {
       printf("Temperature_sensor error\n");
     } else {
       send((uint8_t *)&temperature, sizeof(int16_t));
     }
-    // How to use the is_in_error of spi_bus?
-    if (is_in_error) {
+    // How to use the error_number of spi_bus?
+    if (error_number != 0) {
       printf("SPI bus error\n");
     }
   }

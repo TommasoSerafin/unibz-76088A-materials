@@ -1,13 +1,19 @@
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
-bool is_in_error;
+int error_number;
 bool is_idle;
 void init() {
 }
 int16_t get_current_temperature() {
   if (is_idle) {
-    return 0;
+    is_idle = false;
+    int temperature;
+    printf("Please insert the temperature> ");
+    scanf("%d", &temperature);
+    is_idle = true;
+    return temperature;
   }
   return INT16_MIN;
 }

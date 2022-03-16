@@ -2,11 +2,11 @@
 #include <stdint.h>
 #include <stdio.h>
 
-int error_number;
-bool is_idle;
-void init(void) {
+int temperature_sensor_error_number = 0;
+static bool is_idle = true;
+void temperature_sensor_init(void) {
 }
-int16_t get_current_temperature(void) {
+int16_t temperature_sensor_get_current_temperature(void) {
   if (is_idle) {
     is_idle = false;
     int temperature;
@@ -17,8 +17,8 @@ int16_t get_current_temperature(void) {
   }
   return INT16_MIN;
 }
-void deinit(void) {
+void temperature_sensor_deinit(void) {
 }
 
-void foo(void) {
+static void foo(void) {
 }
