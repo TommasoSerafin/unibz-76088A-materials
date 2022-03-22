@@ -178,8 +178,7 @@ $ gcc -DCONFIGURATION_FAKE_NVM_DEFAULT_USE_FAHRENHEIT=0 main.c spi_bus.c tempera
 
 ## 5
 
-* A coarse-grained conditional compilation can be performed to reduce complexity.
-* There is no need to have 1-1 correspondence between header file and source file.
+**CHANGELOG:**: separated configuration.c into configuration_common.c configuration_fake_default.c, configuration_fake_file.c, and configuration_fake_user_input.c.
 
 ```sh
 $ gcc main.c spi_bus.c temperature_sensor.c configuration_common.c configuration_fake_user_input.c
@@ -191,9 +190,27 @@ $ gcc main.c spi_bus.c temperature_sensor.c configuration_common.c configuration
 # Execution result: the configuration of use_fahrenheit is read from the file `fake_nvm`. If the file does not exist it is created and filled with a default value, which may depend on CONFIGURATION_FAKE_NVM_DEFAULT_USE_FAHRENHEIT. We can also manually change the values in the file and see what happens.
 ```
 
+**Takeaways:**
+
+* A coarse-grained conditional compilation can be performed to reduce conditional compilation complexity.
+* There is no need to have 1-1 correspondence between header file and source file.
+
 ## 6
 
-Now... it's becoming messy... I want each it's own folder
+Now, with so many files, it's becoming messy. I want to put each module in its own folder.
+
+**CHANGELOG:**: simply create a folder for each module and copied all its files in the folder.
+
+Let's try to build
+
+```sh
+$ gcc main.c spi_bus/spi_bus.c temperature_sensor/temperature_sensor.c configuration/common.c configuration/fake_user_input.c
+# Result: preprocessor error: no such file or directory
+# I.e. cannot find haeder files.
+
+$ gcc main.c -Ispi_bus/ -Itemperature_sensor -Iconfiguration spi_bus/spi_bus.c temperature_sensor/temperature_sensor.c configuration/common.c configuration/fake_user_input.c
+# Result: builds successfully!
+```
 
 **Takeaways:**
 
