@@ -178,12 +178,20 @@ $ gcc -DCONFIGURATION_FAKE_NVM_DEFAULT_USE_FAHRENHEIT=0 main.c spi_bus.c tempera
 
 ## 5
 
-* A coarse-grained conditional compilation can be performed
+* A coarse-grained conditional compilation can be performed to reduce complexity.
 * There is no need to have 1-1 correspondence between header file and source file.
 
-## 6
+```sh
+$ gcc main.c spi_bus.c temperature_sensor.c configuration_common.c configuration_fake_user_input.c
+# Result: builds successfully!
+# Execution result: the configuration of use_fahrenheit is asked to the user
 
-## 5
+$ gcc main.c spi_bus.c temperature_sensor.c configuration_common.c configuration_fake_file.c
+# Result: builds successfully!
+# Execution result: the configuration of use_fahrenheit is read from the file `fake_nvm`. If the file does not exist it is created and filled with a default value, which may depend on CONFIGURATION_FAKE_NVM_DEFAULT_USE_FAHRENHEIT. We can also manually change the values in the file and see what happens.
+```
+
+## 6
 
 Now... it's becoming messy... I want each it's own folder
 
