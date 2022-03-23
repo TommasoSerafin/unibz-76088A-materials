@@ -81,7 +81,7 @@ $ gcc main.c spi_bus.c temperature_sensor.c configuration.c
 
 **Takeaways:**
 
-* The `struct` is a purely C language-level construct that has no "reflection" in the machine code. The linker, which job is "filling the holes" in the machine code, doesn't deal with `struct`s.
+* The `struct` is a purely C language-level construct that has no "reflection" in the machine code. The linker, whose job is "filling the holes" in the machine code, doesn't deal with `struct`s.
 	* Indeed C doesn't support [reflection](https://en.wikipedia.org/wiki/Reflective_programming).
     * So the one definition rule is not something that is diagnosed only by the linker. Other constructs of the C language are also subject to the one definition rule (e.g. `enum`, `typedef`, etc.) and are diagnosed by the compiler.
 * Some constructs that are typically put in a header file are repeatable (e.g. declaration of functions), but some other constructs should appear only once (e.g. definition of a `struct`). To ensure that a header file is included only once in a translation unit, we have to use header guards.
@@ -166,10 +166,12 @@ $ gcc -DCONFIGURATION_FAKE_NVM_DEFAULT_USE_FAHRENHEIT=0 main.c spi_bus.c tempera
 
 * Use of `assert()` from `assert.h` to verify conditions that must be true
     * Note: our example is actually not the most appropriate use case for `assert()`.
-* We see again an example of "treating" a variable like an byte array and just manipulate it. Is it really "okay" to just treat arbitrary objects as byte array? No. It's not portable. At least these aspects are not universally fixed. They may depend on architecture, optimization level, etc.
+* We see again an example of "treating" a variable like an byte array and just manipulate it. Is it really "okay" to just treat arbitrary objects as byte array? In other words, is it okay to directly work with the underlying binary representation of the data? Typically the answer is no. It's not portable. At least the following aspects are not universally "fixed". They may depend on architecture, optimization level, etc.
     * [Signed number representations](https://en.wikipedia.org/wiki/Signed_number_representations)
     * [Data structure alignment](https://en.wikipedia.org/wiki/Data_structure_alignment)
     * [Endianness](https://en.wikipedia.org/wiki/Endianness)
+    * The problem is that nobody has agreed on these things.
+    * We need to perform serialization and deserialization: agree on the data format and convert the program data to such data format as it (i.e. the program data) leaves the program, e.g. for transmission, for storage, etc..
     * Examples of serialization and deserialization solutions.
         * Java `Serializable`.
         * JSON, XML.
