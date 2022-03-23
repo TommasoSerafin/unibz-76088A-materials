@@ -23,7 +23,6 @@ $ gcc main.c spi_bus.c temperature_sensor.c
 
 * In C there is no concept of module (a proper module system has been introduced in C++ 20).
 * By using variables and functions with external linkage, we implicitly make them accessible from other translation units.
-TODO
 * It is customary to use header files (which typically have the extension `.h`) and source files (which typically have the extension `.c`) to implement a module.
     * From a conceptual point of view:
         * header files are files where the public interface of a module lies.
@@ -173,6 +172,7 @@ $ gcc -DCONFIGURATION_FAKE_NVM_DEFAULT_USE_FAHRENHEIT=0 main.c spi_bus.c tempera
     * [Endianness](https://en.wikipedia.org/wiki/Endianness)
     * Examples of serialization and deserialization solutions.
         * Java `Serializable`.
+        * JSON, XML.
         * Protocol Buffer.
         * FlatBuffer.
 

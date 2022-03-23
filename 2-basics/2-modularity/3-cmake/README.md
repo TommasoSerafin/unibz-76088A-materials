@@ -12,17 +12,18 @@ We know that by passing the `-c` flag, we tell it to compile source files, but n
 
 ```sh
 # Compile the source files, but don't link
-$ gcc -c main.c spi_bus.c temperature_sensor.c configuration.c
+$ gcc -c main.c -Ispi_bus/ -Itemperature_sensor -Iconfiguration spi_bus/spi_bus.c temperature_sensor/temperature_sensor.c configuration/common.c configuration/fake_user_input.c
 # Link the compiled object files
-$ gcc main.o spi_bus.o temperature_sensor.o configuration.o
+$ gcc main.o spi_bus.o temperature_sensor.o common.o fake_user_input.o
 
 # If I change a source file, I just need to re-compile the changed source file
-$ gcc -c configuration.c
+# E.g. I change configuration/common.c
+$ gcc -c -Itemperature_sensor configuration/common.c
 # And then link everything again.
-$ gcc main.o spi_bus.o temperature_sensor.o configuration.o
+$ gcc main.o spi_bus.o temperature_sensor.o common.o fake_user_input.o
 ```
 
-But what if a header file is changed? Then I would need to re-compile all the source files that include that header file. The compiler is able to provide such information, so with enough shell scripting we can achieve the goal of "re-compiling what changed", but why reinventing the wheel? 
+But what if a header file is changed? Then I would need to re-compile all the source files that include that header file. The compiler is able to provide the header file dependency information (e.g. on `gcc` using the `-MM` and `-MT` options), so with enough shell scripting we can achieve the goal of "re-compiling what changed", but why reinventing the wheel? 
 
 ## 1
 
@@ -31,7 +32,7 @@ But what if a header file is changed? Then I would need to re-compile all the so
 ```sh
 $ mkdir build
 $ cd build
-$ cmake ..
+$ cmake -DCONFIGURATION_FAKE_IMPL="" ..
 $ make 
 
 # Use a different build system, ninja
